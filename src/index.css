@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "ss01";
+  }
+
+  /* Bauhaus headlines: massive, uppercase, tight */
+  h1,
+  h2,
+  h3 {
+    @apply font-black uppercase tracking-tighter leading-[0.9];
+  }
+}
+
+@layer components {
+  /* Uppercase label used for tags / eyebrows */
+  .label-bauhaus {
+    @apply text-xs font-bold uppercase tracking-widest;
+  }
+
+  /* Dot-grid background texture */
+  .dot-grid {
+    background-image: radial-gradient(#12121233 2px, transparent 2px);
+    background-size: 20px 20px;
+  }
+
+  /* Diagonal-stripe texture (used on colored panels) */
+  .stripe-grid {
+    background-image: repeating-linear-gradient(
+      45deg,
+      #12121214,
+      #12121214 2px,
+      transparent 2px,
+      transparent 12px
+    );
+  }
+
+  /* Reusable physical "press" interaction for clickable surfaces */
+  .press {
+    @apply transition-all duration-200 ease-out active:translate-x-[2px] active:translate-y-[2px] active:shadow-none;
+  }
+}
+
+@layer utilities {
+  /* Triangle via clip-path (Bauhaus third shape) */
+  .clip-triangle {
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  }
+}

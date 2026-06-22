@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Generated at build time by scripts/generate-manifest.mjs
+# (the source content folders ARE committed; these copies are regenerated)
+public/data/
+public/manifest.json
+
+# Logs / env / editor
+*.log
+.DS_Store
+Thumbs.db
+.env
+.env.local
+.vscode/
+.idea/
+.claude/
+.agents/
