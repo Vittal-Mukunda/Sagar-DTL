@@ -30,6 +30,11 @@ export interface Manifest {
 /** Vite injects BASE_URL (e.g. "/" locally, "/repo/" on GitHub Pages). */
 const BASE = import.meta.env.BASE_URL;
 
+/** Live API (served by vite-plugin-content-api) — same origin as the app. */
+export const MANIFEST_API = `${BASE}api/manifest`;
+/** Server-Sent Events stream that pushes a message on every filesystem change. */
+export const EVENTS_URL = `${BASE}api/events`;
+
 /** Build a servable URL for a manifest path, encoding each segment safely. */
 export function fileUrl(relPath: string): string {
   const encoded = relPath
@@ -39,11 +44,22 @@ export function fileUrl(relPath: string): string {
   return `${BASE}data/${encoded}`;
 }
 
-/** Fetch + parse the manifest. Throws on network/parse error. */
-export async function loadManifest(): Promise<Manifest> {
+/**
+ * Load the manifest, preferring the live filesystem API. Falls back to the
+ * static snapshot (public/manifest.json) when no server is running — e.g. a
+ * static GitHub Pages export. `live` tells the caller whether real-time updates
+ * (SSE / polling) are available.
+ */
+export async function loadManifest(): Promise<{ manifest: Manifest; live: boolean }> {
+  try {
+    const res = await fetch(MANIFEST_API, { cache: "no-store" });
+    if (res.ok) return { manifest: await res.json(), live: true };
+  } catch {
+    // No live API — fall through to the static snapshot below.
+  }
   const res = await fetch(`${BASE}manifest.json`, { cache: "no-cache" });
   if (!res.ok) throw new Error(`Failed to load manifest (${res.status})`);
-  return res.json();
+  return { manifest: await res.json(), live: false };
 }
 
 /** Find a top-level root folder by exact name. */

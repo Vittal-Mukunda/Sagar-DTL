@@ -169,15 +169,30 @@ npm run build    # production build into dist/
 npm run manifest # regenerate the folder index after adding files locally
 ```
 
-`npm run dev` and `npm run build` regenerate the content index (`manifest.json`)
-automatically before they run.
+When the dev or preview server is running, the folder structure on disk is the
+**single source of truth** — create, rename or delete a folder in the file
+manager and the open website updates on its own, no rebuild and no code change.
+`npm run build` additionally snapshots the tree into `manifest.json` for fully
+static hosting (GitHub Pages).
 
 ---
 
 ## How it works (for developers)
 
-- **`scripts/generate-manifest.mjs`** walks every top-level content folder, writes a
-  `public/manifest.json` tree, and copies the files into `public/data/` so they can be served.
+- **`vite-plugin-content-api.mjs`** is the live backend, mounted on both the dev and
+  preview servers. It exposes:
+  - `GET /api/manifest` — scans the content root on every request (no caching) and returns the folder tree as JSON.
+  - `GET /data/<path>` — streams the actual file straight from disk (path-traversal protected).
+  - `GET /api/events` — a Server-Sent Events stream; an `fs.watch` on the content root pushes a
+    `change` event whenever anything is added/renamed/removed.
+  Set `CONTENT_ROOT` to scan a directory other than the repo root.
+- **`scripts/scan-content.mjs`** holds the shared directory-walk logic used by both the live API
+  and the static build generator, so all modes describe the tree identically.
+- **`scripts/generate-manifest.mjs`** is the static fallback: at build time it writes
+  `public/manifest.json` and copies files into `public/data/` for hosts that can't run a server.
+- **`src/lib/ManifestContext.tsx`** loads from the live API, subscribes to the SSE stream for
+  instant updates, and also re-scans every few seconds as a safety net. It falls back to the
+  static `manifest.json` when no server is reachable.
 - **React + Vite + TypeScript + Tailwind** render that manifest. `FolderBrowser`
   recursively renders folders/files; `DataTable` parses CSV/XLSX into a searchable table.
 - **`src/config/sections.ts`** is the only place that maps a folder to a page (title, colour,

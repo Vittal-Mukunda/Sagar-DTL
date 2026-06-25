@@ -6,7 +6,6 @@ import { useManifest } from "../lib/ManifestContext";
 import { findRoot, collectFiles } from "../lib/manifest";
 import { Button } from "../components/Button";
 import { Card } from "../components/Card";
-import { ShapeComposition } from "../components/Shapes";
 
 export function Home() {
   const { manifest } = useManifest();
@@ -20,38 +19,30 @@ export function Home() {
     <div>
       {/* HERO */}
       <section className="border-b-4 border-foreground">
-        <div className="grid lg:grid-cols-2">
-          {/* Left: headline */}
-          <div className="dot-grid px-4 sm:px-6 lg:px-12 py-16 lg:py-24 flex flex-col justify-center">
-            <p className="label-bauhaus text-bauhaus-red mb-4">
-              RV College of Engineering
-            </p>
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl">
-              Industrial
-              <br />
-              Engineering <span className="text-bauhaus-blue">&</span>
-              <br />
-              Management
-            </h1>
-            <p className="mt-6 max-w-md text-lg font-medium leading-relaxed">
-              One home for everything in the department — study material, question
-              papers, placements, projects, and the people behind them.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <Link to="/study">
-                <Button variant="red">
-                  Study Material <ArrowRight className="h-5 w-5" />
-                </Button>
-              </Link>
-              <Link to="/placements">
-                <Button variant="outline">Placements</Button>
-              </Link>
-            </div>
-          </div>
-
-          {/* Right: geometric color block */}
-          <div className="relative bg-bauhaus-blue min-h-[280px] lg:min-h-0 overflow-hidden border-t-4 lg:border-t-0 lg:border-l-4 border-foreground">
-            <ShapeComposition className="absolute inset-0 m-auto h-72 w-72" />
+        <div className="dot-grid px-4 sm:px-6 lg:px-12 py-16 lg:py-24 flex flex-col justify-center">
+          <p className="label-bauhaus text-bauhaus-red mb-4">
+            RV College of Engineering
+          </p>
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl">
+            Industrial
+            <br />
+            Engineering <span className="text-bauhaus-blue">&</span>
+            <br />
+            Management
+          </h1>
+          <p className="mt-6 max-w-md text-lg font-medium leading-relaxed">
+            One home for everything in the department — study material, question
+            papers, placements, projects, and the people behind them.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-4">
+            <Link to="/study">
+              <Button variant="red">
+                Study Material <ArrowRight className="h-5 w-5" />
+              </Button>
+            </Link>
+            <Link to="/placements">
+              <Button variant="outline">Placements</Button>
+            </Link>
           </div>
         </div>
       </section>

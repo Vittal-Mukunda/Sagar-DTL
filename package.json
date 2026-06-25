@@ -6,7 +6,6 @@
   "description": "Industrial Engineering & Management Department website — RV College of Engineering",
   "scripts": {
     "manifest": "node scripts/generate-manifest.mjs",
-    "predev": "npm run manifest",
     "dev": "vite",
     "prebuild": "npm run manifest",
     "build": "tsc --noEmit && vite build",
